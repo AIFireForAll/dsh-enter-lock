@@ -1,7 +1,7 @@
 {
   "name": "dsh-enter-lock",
   "version": "0.3.0",
-  "description": "DeepSeek Harness Web plugin that locks the chat composer Enter-send. Toggle with a lock button or Ctrl+Alt+L to prevent accidental sends while typing or editing long prompts; unlock to send. IME-safe and per-session.",
+  "description": "DeepSeek Harness plugin that locks the web chat composer Enter-send. Toggle with a lock button or Ctrl+Alt+L to prevent accidental sends while typing or editing long prompts; unlock to send. IME-safe and per-session.",
   "type": "module",
   "main": "lib/index.js",
   "exports": {

@@ -1,6 +1,8 @@
 # dsh-enter-lock
 
-A DeepSeek Harness Web plugin that adds an **Enter-send lock** to the chat composer.
+[中文](README.md) | English
+
+A **DeepSeek Harness plugin** that adds an **Enter-send lock** to the web chat composer.
 
 - Click the lock button next to the composer, or press **`Ctrl+Alt+L`** (macOS: **`⌘+Option+L`**), to toggle the lock.
 - While locked, you can keep editing the draft, but pressing Enter will not send it.
@@ -19,7 +21,7 @@ This plugin adds a "lock before send" guard between editing and submission.
 ## What it focuses on
 
 - **Lock button**: registered in the official `conversation.input.right` slot, next to the model selector and send button.
-- **Keyboard toggle**: `Ctrl+Alt+L` on Windows/Linux, `⌘+Option+L` on macOS, while focus is inside the composer.
+- **Keyboard toggle**: press once to lock and once to unlock while focus is inside the composer.
 - **Per-session state**: each conversation has its own lock flag.
 - **No composer replacement**: it only intercepts the keyboard submit path and keeps the official draft state machine, command menu, queue, and attachment behavior.
 - **IME-friendly**: Enter during composition is never intercepted.
@@ -48,18 +50,20 @@ Normal behaviors remain available:
 4. Press Enter or click the official send button.
 5. The agent receives the message and starts answering. Drafts blocked while locked remain intact in the composer.
 
-## Why Ctrl+Alt+L?
+## Keyboard shortcut
 
-| Shortcut | Chrome | Edge | Decision |
-| --- | --- | --- | --- |
-| `Ctrl+L` | Focus address bar | Focus address bar | Reserved by both browsers |
-| `Ctrl+Shift+L` | Unused by default | Paste and search / Paste and go | Reserved by Edge |
-| **`Ctrl+Alt+L`** | Unused in official list | Unused in official list | **Used by this plugin** |
+| Platform | Shortcut | Action |
+| --- | --- | --- |
+| Windows / Linux | `Ctrl+Alt+L` | Toggle lock / unlock while focus is inside the composer |
+| macOS | `⌘+Option+L` | Toggle lock / unlock while focus is inside the composer |
 
-References:
+Holding the shortcut down does not toggle repeatedly: `keydown` auto-repeat is ignored.
 
-- [Chrome keyboard shortcuts](https://support.google.com/chrome/answer/157179)
-- [Keyboard shortcuts in Microsoft Edge](https://support.microsoft.com/en-us/microsoft-edge/keyboard-shortcuts-in-microsoft-edge-50d3edab-30d9-c7e4-21ce-37fe2713cfad)
+## Requirements
+
+- DeepSeek Harness `0.1.0-rc.6` or newer;
+- the `web` profile;
+- a modern Chromium-based browser (Chrome or Edge).
 
 ## Installation
 
@@ -121,11 +125,40 @@ Then restart `dsh web` and refresh the page.
 
 5. Lock state is per session and is kept in memory only. It is cleared on refresh or restart.
 
+## Configuration
+
+The plugin is zero-configuration. It requires no API key, no settings fields, and no `settings.yaml` entry. Lock state lives in browser memory only.
+
 ## Limitations
 
 - Lock state is browser-memory only; it does not write `settings.yaml` and makes no network requests.
 - The shortcut only acts while focus is inside the official `[data-composer-card]` area.
 - The plugin uses the official `conversation.input.right` slot and does not replace the composer.
+
+## Troubleshooting
+
+### The lock button is not visible
+
+1. Verify that the plugin is mounted:
+
+   ```sh
+   dsh --profile web --dump-config | grep dsh-enter-lock
+   ```
+
+2. Restart `dsh web` and force-refresh the page (`Ctrl+F5`).
+3. Make sure you are using the `web` profile.
+
+### The shortcut does nothing
+
+- Click the composer first so focus is inside the input area.
+- The shortcut is ignored during IME composition.
+- Lock state is per session: a newly opened session starts unlocked.
+
+### A message was sent while locked
+
+- `Shift+Enter` inserts a newline; it is not a send.
+- Clicking the official send button is a deliberate mouse action and is not blocked.
+- Check that the lock button is highlighted as locked and review which Enter combination was pressed.
 
 ## Uninstall
 

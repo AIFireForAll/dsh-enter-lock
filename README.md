@@ -1,5 +1,9 @@
 # dsh-enter-lock
 
+中文 | [English](README.en.md)
+
+A **DeepSeek Harness plugin** that adds an **Enter-send lock** to the web chat composer.
+
 DeepSeek Harness Web 插件：给聊天输入框增加一个 **Enter 发送锁**。
 
 - 点击输入框旁的锁形按钮，或按 **`Ctrl+Alt+L`**（macOS：**`⌘+Option+L`**），即可锁定/解锁。
@@ -11,15 +15,15 @@ DeepSeek Harness Web 插件：给聊天输入框增加一个 **Enter 发送锁**
 DeepSeek Harness Web 的输入框默认在按下 Enter 时立即发送消息。以下场景很容易误触：
 
 - 使用中文输入法时，按 Enter 只是为了确认候选词，但消息被直接发送；
-- 编辑长提示词、代码或结构化文本时，想换行或继续编辑，却误按 Enter；
-- 草稿还没有写完，就意外进入了发送流程，打断当前思路。
+- 编辑长提示词、代码或结构化文本时，想继续编辑，却误按 Enter；
+- 草稿还没有写完，就意外进入了发送流程。
 
 该插件补上了“发送前先解锁”这一层保护。
 
 ## 聚焦的功能
 
 - **锁形按钮**：注册在官方 `conversation.input.right` 槽位，显示在输入框右下角、发送按钮附近。
-- **快捷键切换**：输入框区域聚焦时按 `Ctrl+Alt+L`（macOS 为 `⌘+Option+L`）锁定或解锁。
+- **快捷键切换**：焦点位于输入框区域时，按一次锁定，再按一次解锁。
 - **按会话隔离**：每个会话独立保存锁状态，切换会话互不影响。
 - **不替换官方输入框**：只拦截键盘提交路径，保留官方草稿状态机、命令菜单、队列、附件等能力。
 - **中文输入法友好**：IME 组合期间的 Enter 永远放行。
@@ -48,18 +52,20 @@ DeepSeek Harness Web 的输入框默认在按下 Enter 时立即发送消息。�
 4. 按 Enter，或点击官方发送按钮发送消息。
 5. Agent 收到消息后开始回答；锁定期间被阻止的草稿会原样保留在输入框中。
 
-## 为什么使用 Ctrl+Alt+L
+## 快捷键
 
-| 快捷键 | Chrome | Edge | 结论 |
-| --- | --- | --- | --- |
-| `Ctrl+L` | 聚焦地址栏 | 聚焦地址栏 | 浏览器占用，网页无法可靠拦截，不采用 |
-| `Ctrl+Shift+L` | 无默认占用 | “粘贴并搜索 / 粘贴并转到” | Edge 占用，不采用 |
-| **`Ctrl+Alt+L`** | 官方表中未占用 | 官方表中未占用 | **采用**；macOS 对应 `⌘+Option+L` |
+| 平台 | 快捷键 | 作用 |
+| --- | --- | --- |
+| Windows / Linux | `Ctrl+Alt+L` | 在输入框区域内切换锁定 / 解锁 |
+| macOS | `⌘+Option+L` | 在输入框区域内切换锁定 / 解锁 |
 
-参考资料：
+按住不放不会连续切换：插件会忽略 `keydown` 的自动重复。
 
-- [Chrome keyboard shortcuts](https://support.google.com/chrome/answer/157179)
-- [Keyboard shortcuts in Microsoft Edge](https://support.microsoft.com/en-us/microsoft-edge/keyboard-shortcuts-in-microsoft-edge-50d3edab-30d9-c7e4-21ce-37fe2713cfad)
+## 环境要求
+
+- DeepSeek Harness `0.1.0-rc.6` 或更新版本；
+- `web` profile；
+- 基于 Chromium 的现代浏览器（Chrome / Edge 均可）。
 
 ## 安装
 
@@ -129,12 +135,41 @@ dsh --profile web --dump-config | grep dsh-enter-lock
 
 5. 锁状态按会话独立保存，刷新页面或重启后自动清除。
 
+## 配置
+
+插件默认零配置，不需要填写 API Key、设置项或 `settings.yaml`。锁状态仅保存在浏览器内存中。
+
 ## 功能与限制
 
 - 锁定状态只保存在浏览器内存中，不写 `settings.yaml`，不发起网络请求。
 - 快捷键只在焦点位于官方 `[data-composer-card]` 区域内时生效。
 - 插件使用官方 `conversation.input.right` 槽位，不替换官方 composer。
 - 不干扰其他输入框、按钮、浏览器快捷键或全局快捷键。
+
+## 疑难排查
+
+### 输入框旁边看不到锁按钮
+
+1. 确认插件已挂载：
+
+   ```sh
+   dsh --profile web --dump-config | grep dsh-enter-lock
+   ```
+
+2. 重启 `dsh web` 并强制刷新页面（`Ctrl+F5`）。
+3. 确认当前使用的是 `web` profile。
+
+### 按快捷键没有反应
+
+- 请先点击输入框，确保焦点位于输入框区域内。
+- 输入法正在组合输入时，快捷键会被忽略，避免干扰候选词。
+- 锁状态是按会话保存的：切换到新会话后，新会话默认是解锁状态。
+
+### 锁定后仍然“发送”了
+
+- `Shift+Enter` 是换行，不是发送。
+- 鼠标点击官方发送按钮是刻意操作，锁不会阻止。
+- 如果草稿意外提交，请检查锁按钮是否显示为锁定状态（高亮），以及是否使用了其他 Enter 组合键。
 
 ## 卸载
 
