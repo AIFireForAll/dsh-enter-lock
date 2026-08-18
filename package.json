@@ -1,7 +1,7 @@
 {
   "name": "dsh-enter-lock",
   "version": "0.3.0",
-  "description": "DeepSeek Harness Web composer Enter lock: a lock button plus Ctrl+Alt+L to block accidental Enter-send while editing.",
+  "description": "DeepSeek Harness Web plugin that locks the chat composer Enter-send. Toggle with a lock button or Ctrl+Alt+L to prevent accidental sends while typing or editing long prompts; unlock to send. IME-safe and per-session.",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -51,10 +51,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zy200212/dsh-enter-lock.git"
+    "url": "git+https://github.com/AIFireForAll/dsh-enter-lock.git"
   },
   "bugs": {
-    "url": "https://github.com/zy200212/dsh-enter-lock/issues"
+    "url": "https://github.com/AIFireForAll/dsh-enter-lock/issues"
   },
-  "homepage": "https://github.com/zy200212/dsh-enter-lock#readme"
+  "homepage": "https://github.com/AIFireForAll/dsh-enter-lock#readme"
 }

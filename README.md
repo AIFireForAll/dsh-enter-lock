@@ -3,8 +3,50 @@
 DeepSeek Harness Web 插件：给聊天输入框增加一个 **Enter 发送锁**。
 
 - 点击输入框旁的锁形按钮，或按 **`Ctrl+Alt+L`**（macOS：**`⌘+Option+L`**），即可锁定/解锁。
-- 锁定后**仍然可以正常编辑草稿**，但按 Enter 不会发送消息，避免输入法确认候选词或编辑长文本时误触 Enter。
+- 锁定后**仍然可以正常编辑草稿**，但按 Enter 不会发送消息。
 - 再次点击按钮或再按一次快捷键即可解锁，恢复 Enter 发送。
+
+## 功能起因
+
+DeepSeek Harness Web 的输入框默认在按下 Enter 时立即发送消息。以下场景很容易误触：
+
+- 使用中文输入法时，按 Enter 只是为了确认候选词，但消息被直接发送；
+- 编辑长提示词、代码或结构化文本时，想换行或继续编辑，却误按 Enter；
+- 草稿还没有写完，就意外进入了发送流程，打断当前思路。
+
+该插件补上了“发送前先解锁”这一层保护。
+
+## 聚焦的功能
+
+- **锁形按钮**：注册在官方 `conversation.input.right` 槽位，显示在输入框右下角、发送按钮附近。
+- **快捷键切换**：输入框区域聚焦时按 `Ctrl+Alt+L`（macOS 为 `⌘+Option+L`）锁定或解锁。
+- **按会话隔离**：每个会话独立保存锁状态，切换会话互不影响。
+- **不替换官方输入框**：只拦截键盘提交路径，保留官方草稿状态机、命令菜单、队列、附件等能力。
+- **中文输入法友好**：IME 组合期间的 Enter 永远放行。
+
+## 可以防止什么行为
+
+锁定状态下，以下键盘发送行为都会被阻止：
+
+- 普通 `Enter` 发送；
+- `Ctrl+Enter` / `Cmd+Enter` 发送；
+- 其他会触发官方提交路径的 Enter 组合；
+- 未编辑完的草稿被意外提交。
+
+同时保留这些正常行为：
+
+- `Shift+Enter` 仍然插入换行；
+- 输入法候选词确认的 Enter 不受影响；
+- 草稿编辑、复制、粘贴、附件操作不受影响；
+- 鼠标点击官方发送按钮仍然可以发送——锁只防键盘误触。
+
+## 如何获得 AI 的回答
+
+1. 在输入框正常编辑草稿。
+2. 如需防误触，按 `Ctrl+Alt+L` 或点击锁按钮锁定。
+3. 确认草稿已经完整后，再次按 `Ctrl+Alt+L` 或点击锁按钮解锁。
+4. 按 Enter，或点击官方发送按钮发送消息。
+5. Agent 收到消息后开始回答；锁定期间被阻止的草稿会原样保留在输入框中。
 
 ## 为什么使用 Ctrl+Alt+L
 
@@ -24,25 +66,25 @@ DeepSeek Harness Web 插件：给聊天输入框增加一个 **Enter 发送锁**
 ### 方式一：从本仓库 GitHub 安装
 
 ```sh
-dsh plugin --profile web add github:zy200212/dsh-enter-lock
+dsh plugin --profile web add github:AIFireForAll/dsh-enter-lock
 ```
 
 也可以显式使用 Git URL：
 
 ```sh
-dsh plugin --profile web add https://github.com/zy200212/dsh-enter-lock.git
+dsh plugin --profile web add https://github.com/AIFireForAll/dsh-enter-lock.git
 ```
 
 建议锁定到某个 commit 以保证可重复安装：
 
 ```sh
-dsh plugin --profile web add 'github:zy200212/dsh-enter-lock#<commit-sha>'
+dsh plugin --profile web add 'github:AIFireForAll/dsh-enter-lock#<commit-sha>'
 ```
 
 ### 方式二：从本地目录安装
 
 ```sh
-git clone https://github.com/zy200212/dsh-enter-lock.git
+git clone https://github.com/AIFireForAll/dsh-enter-lock.git
 dsh plugin --profile web add ./dsh-enter-lock
 ```
 
@@ -81,7 +123,6 @@ dsh --profile web --dump-config | grep dsh-enter-lock
 
    - 普通 `Enter`：不发送。
    - `Ctrl+Enter` / `Cmd+Enter`：不发送。
-   - 其他会触发官方提交路径的 Enter 组合：不发送。
    - `Shift+Enter`：仍然插入换行。
    - 输入法组合期间的 Enter：正常用于候选词确认，不受影响。
    - 点击官方发送按钮：仍可发送，锁只防键盘误触。
@@ -101,14 +142,16 @@ dsh --profile web --dump-config | grep dsh-enter-lock
 dsh plugin --profile web remove dsh-enter-lock
 ```
 
-## 开发
+## 开发与构建
+
+安装本仓库不需要构建：`lib/` 已提交预构建产物，且没有 `prepare` / `postinstall` 脚本。
+
+如需修改源码后重新生成构建产物：
 
 ```sh
 npm run build   # 生成 lib/index.js 与 lib/client.js
 npm run check   # 结构检查
 ```
-
-`lib/` 是已提交的构建产物，Git/本地安装不需要运行 `prepare` / `postinstall` 脚本。
 
 ## 目录结构
 
@@ -124,6 +167,7 @@ dsh-enter-lock/
 │   ├── build.mjs
 │   └── check.mjs
 ├── README.md
+├── README.en.md
 └── LICENSE
 ```
 
