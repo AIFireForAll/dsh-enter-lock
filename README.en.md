@@ -144,6 +144,7 @@ The plugin is zero-configuration. It requires no API key, no settings fields, an
 
 - Click the composer first so focus is inside the input area.
 - The shortcut is ignored during IME composition.
+- On some non-US keyboard layouts `Ctrl+Alt` is treated as AltGr; the plugin matches the physical `KeyL` key, so it should still work.
 - Lock state is per session: a newly opened session starts unlocked.
 
 ### A message was sent while locked

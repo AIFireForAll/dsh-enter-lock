@@ -14,7 +14,7 @@ for (const [name, content, required] of [
   ['Client', client, 'event.stopImmediatePropagation'],
   ['Client', client, 'event.isComposing || event.keyCode === 229'],
   ['Client', client, 'event.altKey !== true'],
-  ['Client', client, "event.key.toLowerCase() !== 'l'"],
+  ['Client', client, "event.code === 'KeyL'"],
 ]) {
   if (!content.includes(required)) {
     throw new Error(`${name} bundle is missing required fragment: ${required}`)
