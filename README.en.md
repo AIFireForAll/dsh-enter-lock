@@ -4,9 +4,9 @@
 
 A **DeepSeek Harness plugin** that adds an **Enter-send lock** to the web chat composer.
 
-- Click the lock button next to the composer, or press **`Ctrl+Alt+L`** (macOS: **`⌘+Option+L`**), to toggle the lock.
+- Click the lock button next to the composer to toggle the lock.
 - While locked, you can keep editing the text in the composer, but pressing Enter will not send it.
-- Click the button or press the shortcut again to unlock and restore Enter-send.
+- Click the button again to unlock and restore Enter-send.
 
 ## Why this plugin exists
 
@@ -20,8 +20,7 @@ This plugin adds a "lock before send" guard between editing and submission.
 
 ## What it focuses on
 
-- **Lock button**: registered in the official `conversation.input.right` slot, next to the model selector and send button.
-- **Keyboard toggle**: press once to lock and once to unlock while focus is inside the composer.
+- **Lock button**: registered in the official `conversation.input.right` slot, next to the model selector and send button; the locked state uses a prominent red fill.
 - **Per-session state**: each conversation has its own lock flag.
 - **No composer replacement**: it only intercepts the keyboard submit path and keeps the official input state machine, command menu, queue, and attachment behavior.
 - **IME-friendly**: Enter during composition is never intercepted.
@@ -42,14 +41,9 @@ Normal behaviors remain available:
 - editing, copy, paste, and attachments are unaffected;
 - clicking the official send button still sends; the lock only guards the keyboard.
 
-## Keyboard shortcut
+## Keyboard shortcut (future work)
 
-| Platform | Shortcut | Action |
-| --- | --- | --- |
-| Windows / Linux | `Ctrl+Alt+L` | Toggle lock / unlock while focus is inside the composer |
-| macOS | `⌘+Option+L` | Toggle lock / unlock while focus is inside the composer |
-
-Holding the shortcut down does not toggle repeatedly: `keydown` auto-repeat is ignored.
+Keyboard shortcut support is currently listed as **future work**. For now, use the lock button beside the composer to lock and unlock. A shortcut will be enabled in a later release after compatibility is verified in Chrome / Edge.
 
 ## Requirements
 
@@ -102,10 +96,9 @@ Then restart `dsh web` and refresh the page.
 
 2. Find the lock button in the composer tool row, near the model selector and the send button.
 
-3. Toggle the lock either way:
+3. Toggle the lock:
 
-   - **Mouse**: click the lock button.
-   - **Keyboard**: focus the composer area and press `Ctrl+Alt+L` (`⌘+Option+L` on macOS).
+   - Click the lock button in the composer tool row.
 
 4. While locked:
 
@@ -124,7 +117,6 @@ The plugin is zero-configuration. It requires no API key, no settings fields, an
 ## Limitations
 
 - Lock state is browser-memory only; it does not write `settings.yaml` and makes no network requests.
-- The shortcut only acts while focus is inside the official `[data-composer-card]` area.
 - The plugin uses the official `conversation.input.right` slot and does not replace the composer.
 
 ## Troubleshooting
@@ -140,18 +132,15 @@ The plugin is zero-configuration. It requires no API key, no settings fields, an
 2. Restart `dsh web` and force-refresh the page (`Ctrl+F5`).
 3. Make sure you are using the `web` profile.
 
-### The shortcut does nothing
+### The shortcut is unavailable
 
-- Click the composer first so focus is inside the input area.
-- The shortcut is ignored during IME composition.
-- On some non-US keyboard layouts `Ctrl+Alt` is treated as AltGr; the plugin matches the physical `KeyL` key, so it should still work.
-- Lock state is per session: a newly opened session starts unlocked.
+Keyboard shortcut support has not been enabled yet and is listed as future work. Use the lock button beside the composer instead. Lock state is per session: a newly opened session starts unlocked.
 
 ### A message was sent while locked
 
 - `Shift+Enter` inserts a newline; it is not a send.
 - Clicking the official send button is a deliberate mouse action and is not blocked.
-- Check that the lock button is highlighted as locked and review which Enter combination was pressed.
+- Check that the lock button shows the red filled locked state and review which Enter combination was pressed.
 
 ## Uninstall
 
@@ -178,7 +167,7 @@ dsh-enter-lock/
 ├── cordis.patch.yml      # profile bundle patch
 ├── src/
 │   ├── index.js          # Host half (dependency-free no-op)
-│   └── client.js         # Web half: button, shortcut, Enter interception
+│   └── client.js         # Web half: button and Enter interception
 ├── lib/                  # prebuilt artifacts
 ├── scripts/
 │   ├── build.mjs

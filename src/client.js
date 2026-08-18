@@ -8,18 +8,25 @@ window.__ModuleLoader__.load({
     var NS = 'dsh-enter-lock'
     var STYLE_ID = 'dsh-enter-lock-style'
 
+    /**
+     * Keyboard shortcut support is intentionally disabled in this release.
+     * The code path below is kept for a future cross-browser implementation;
+     * until then the lock button is the supported control.
+     */
+    var SHORTCUT_ENABLED = false
+
     var zh = {
       lockLabel: '锁定 Enter 发送',
       unlockLabel: '解锁 Enter 发送',
-      lockHint: '锁定：按 Enter 不会发送消息（Ctrl+Alt+L 或 ⌘⌥L 切换）',
-      unlockHint: '解锁：按 Enter 恢复发送消息（Ctrl+Alt+L 或 ⌘⌥L 切换）',
+      lockHint: '锁定：按 Enter 不会发送消息',
+      unlockHint: '解锁：按 Enter 恢复发送消息',
     }
 
     var en = {
       lockLabel: 'Lock Enter-send',
       unlockLabel: 'Unlock Enter-send',
-      lockHint: 'Locked: Enter will not send the message (Ctrl+Alt+L or ⌘⌥L toggles)',
-      unlockHint: 'Unlocked: Enter sends the message again (Ctrl+Alt+L or ⌘⌥L toggles)',
+      lockHint: 'Locked: Enter will not send the message',
+      unlockHint: 'Unlocked: Enter sends the message again',
     }
 
     /**
@@ -137,7 +144,7 @@ window.__ModuleLoader__.load({
       style.setAttribute('data-plugin', NS)
       style.textContent = [
         '[data-dsh-enter-lock]{',
-        'box-sizing:border-box;width:28px;height:28px;padding:0;border:0;border-radius:50%;',
+        'box-sizing:border-box;width:28px;height:28px;padding:0;border:1px solid var(--dsw-alias-border-l2);border-radius:50%;',
         'display:inline-flex;align-items:center;justify-content:center;flex:none;cursor:pointer;',
         'color:var(--dsw-alias-label-secondary);background:transparent;',
         '}',
@@ -145,9 +152,14 @@ window.__ModuleLoader__.load({
         'color:var(--dsw-alias-label-primary);background:var(--dsw-alias-interactive-bg-hover);',
         '}',
         '[data-dsh-enter-lock][aria-pressed="true"]{',
-        'color:var(--dsw-alias-state-business-primary);',
-        'background:color-mix(in srgb,var(--dsw-alias-state-business-primary) 14%,transparent);',
-        'border:1px solid color-mix(in srgb,var(--dsw-alias-state-business-primary) 35%,transparent);',
+        'color:#fff;',
+        'background:var(--dsw-alias-state-error-primary);',
+        'border:1px solid var(--dsw-alias-state-error-primary);',
+        '}',
+        '[data-dsh-enter-lock][aria-pressed="true"]:hover{',
+        'color:#fff;',
+        'background:var(--dsw-alias-state-error-secondary);',
+        'border:1px solid var(--dsw-alias-state-error-secondary);',
         '}',
         '[data-dsh-enter-lock]:focus-visible{',
         'outline:2px solid var(--dsw-alias-state-business-primary);outline-offset:2px;',
@@ -211,9 +223,8 @@ window.__ModuleLoader__.load({
 
       ctx.effect(function () {
         function onKeyDown(event) {
-          // Global composer-scoped lock shortcut: only acts when the focused
-          // element is inside a real composer card that owns a lock button.
-          if (isLockShortcut(event)) {
+          // Reserved for future development: cross-browser shortcut support.
+          if (SHORTCUT_ENABLED && isLockShortcut(event)) {
             if (event.isComposing || event.keyCode === 229) return
             var shortcutSessionId = sessionIdFromTarget(event.target)
             if (shortcutSessionId === null || shortcutSessionId === undefined) return
