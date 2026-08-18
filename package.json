@@ -1,0 +1,60 @@
+{
+  "name": "dsh-enter-lock",
+  "version": "0.3.0",
+  "description": "DeepSeek Harness Web composer Enter lock: a lock button plus Ctrl+Alt+L to block accidental Enter-send while editing.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE",
+    "README.en.md"
+  ],
+  "keywords": [
+    "deepseek",
+    "harness",
+    "dsh",
+    "dsh-plugin",
+    "composer",
+    "enter-key",
+    "keyboard-shortcuts",
+    "enter-lock"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-locale"
+      ]
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "react": "^18.2.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zy200212/dsh-enter-lock.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zy200212/dsh-enter-lock/issues"
+  },
+  "homepage": "https://github.com/zy200212/dsh-enter-lock#readme"
+}

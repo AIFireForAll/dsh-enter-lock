@@ -1,0 +1,14 @@
+# dsh-enter-lock bundle patch.
+#
+# Installing this package into a profile with:
+#
+#   dsh plugin --profile <profile> add <package-or-git-spec>
+#
+# appends it to dsh.profile.bundles because package.json declares
+# `dsh.bundle.patch`. That makes the profile boot layer below, which mounts
+# this package as a Cordis plugin. The browser half is discovered through the
+# `dsh.client` declaration in package.json; the Host half is a dependency-free
+# no-op because all state and interception live in the Web client.
+- insert:
+    - id: dsh-enter-lock
+      name: dsh-enter-lock
