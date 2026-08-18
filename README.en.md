@@ -5,16 +5,16 @@
 A **DeepSeek Harness plugin** that adds an **Enter-send lock** to the web chat composer.
 
 - Click the lock button next to the composer, or press **`Ctrl+Alt+L`** (macOS: **`⌘+Option+L`**), to toggle the lock.
-- While locked, you can keep editing the draft, but pressing Enter will not send it.
+- While locked, you can keep editing the text in the composer, but pressing Enter will not send it.
 - Click the button or press the shortcut again to unlock and restore Enter-send.
 
 ## Why this plugin exists
 
-The DeepSeek Harness Web composer sends the current draft as soon as Enter is pressed. That makes accidental sends easy when:
+The DeepSeek Harness Web composer sends the current composer text as soon as Enter is pressed. That makes accidental sends easy when:
 
 - Enter is pressed only to confirm an IME candidate;
 - the user is editing a long prompt, code, or structured text and hits Enter by mistake;
-- the draft is still incomplete and is submitted before the user intended.
+- the text in the composer is still incomplete and is submitted before the user intended.
 
 This plugin adds a "lock before send" guard between editing and submission.
 
@@ -23,7 +23,7 @@ This plugin adds a "lock before send" guard between editing and submission.
 - **Lock button**: registered in the official `conversation.input.right` slot, next to the model selector and send button.
 - **Keyboard toggle**: press once to lock and once to unlock while focus is inside the composer.
 - **Per-session state**: each conversation has its own lock flag.
-- **No composer replacement**: it only intercepts the keyboard submit path and keeps the official draft state machine, command menu, queue, and attachment behavior.
+- **No composer replacement**: it only intercepts the keyboard submit path and keeps the official input state machine, command menu, queue, and attachment behavior.
 - **IME-friendly**: Enter during composition is never intercepted.
 
 ## What it prevents
@@ -33,7 +33,7 @@ While locked, the following keyboard sends are blocked:
 - plain `Enter` send;
 - `Ctrl+Enter` / `Cmd+Enter` send;
 - other Enter combinations that reach the official composer submit path;
-- accidental submission of an unfinished draft.
+- accidental submission of unfinished composer text.
 
 Normal behaviors remain available:
 
@@ -41,14 +41,6 @@ Normal behaviors remain available:
 - IME candidate confirmation still works;
 - editing, copy, paste, and attachments are unaffected;
 - clicking the official send button still sends; the lock only guards the keyboard.
-
-## How to get the AI answer
-
-1. Edit the draft in the composer.
-2. Press `Ctrl+Alt+L` or click the lock button to lock.
-3. When the draft is complete, press `Ctrl+Alt+L` again or click the lock button to unlock.
-4. Press Enter or click the official send button.
-5. The agent receives the message and starts answering. Drafts blocked while locked remain intact in the composer.
 
 ## Keyboard shortcut
 
