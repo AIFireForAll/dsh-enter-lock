@@ -25,6 +25,18 @@ This plugin adds a "lock before send" guard between editing and submission.
 - **No composer replacement**: it only intercepts the keyboard submit path and keeps the official input state machine, command menu, queue, and attachment behavior.
 - **IME-friendly**: Enter during composition is never intercepted.
 
+## Lock state styles
+
+| State | Lock icon style | Meaning |
+| --- | --- | --- |
+| Unlocked (normal) | Gray outlined icon | Enter can send messages normally |
+| Locked | **Red fill with a white lock icon** | Enter cannot send messages |
+
+Hovering over the lock icon shows a state-specific tooltip:
+
+- Unlocked: `Unlocked: Enter can send messages normally`
+- Locked: `Locked: Enter cannot send messages`
+
 ## What it prevents
 
 While locked, the following keyboard sends are blocked:

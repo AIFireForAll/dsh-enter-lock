@@ -18,15 +18,15 @@ window.__ModuleLoader__.load({
     var zh = {
       lockLabel: '锁定 Enter 发送',
       unlockLabel: '解锁 Enter 发送',
-      lockHint: '锁定：按 Enter 不会发送消息',
-      unlockHint: '解锁：按 Enter 恢复发送消息',
+      unlockedHint: '已解锁，当前 Enter 可正常发送消息',
+      lockedHint: '已锁定，当前 Enter 无法发送消息',
     }
 
     var en = {
       lockLabel: 'Lock Enter-send',
       unlockLabel: 'Unlock Enter-send',
-      lockHint: 'Locked: Enter will not send the message',
-      unlockHint: 'Unlocked: Enter sends the message again',
+      unlockedHint: 'Unlocked: Enter can send messages normally',
+      lockedHint: 'Locked: Enter cannot send messages',
     }
 
     /**
@@ -116,7 +116,7 @@ window.__ModuleLoader__.load({
       var snapshot = useControllerSnapshot(controller)
       var locked = sessionId !== undefined && snapshot.sessions[sessionId] === true
       var label = locked ? t('unlockLabel') : t('lockLabel')
-      var hint = locked ? t('unlockHint') : t('lockHint')
+      var hint = locked ? t('lockedHint') : t('unlockedHint')
       return React.createElement('button', {
         type: 'button',
         'data-dsh-enter-lock': '',
