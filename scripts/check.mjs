@@ -13,8 +13,11 @@ for (const [name, content, required] of [
   ['Client', client, 'data-dsh-enter-lock'],
   ['Client', client, 'event.stopImmediatePropagation'],
   ['Client', client, 'event.isComposing || event.keyCode === 229'],
-  ['Client', client, 'event.altKey !== true'],
-  ['Client', client, "event.code === 'KeyL'"],
+  ['Client', client, 'event.altKey === true'],
+  ['Client', client, "event.code === 'KeyK'"],
+  ['Client', client, 'SHORTCUT_ENABLED = true'],
+  ['Client', client, 'function isLockShortcut'],
+  ['Client', client, '[role="listbox"][aria-activedescendant]'],
 ]) {
   if (!content.includes(required)) {
     throw new Error(`${name} bundle is missing required fragment: ${required}`)

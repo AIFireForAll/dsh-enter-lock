@@ -24,6 +24,8 @@ This plugin adds a "lock before send" guard between editing and submission.
 - **Per-session state**: each conversation has its own lock flag.
 - **No composer replacement**: it only intercepts the keyboard submit path and keeps the official input state machine, command menu, queue, and attachment behavior.
 - **IME-friendly**: Enter during composition is never intercepted.
+- **Keyboard shortcut**: `Ctrl+Shift+K` (Windows / Linux) / `Cmd+Shift+K` (macOS) toggles the lock while focus is inside the composer card.
+- **At-file friendly**: while the `@` file/session candidate menu (at file) is open, Enter still confirms the highlighted file or session — the lock only intercepts Enter that would actually send and never interferes with candidate selection.
 
 ## Lock state styles
 
@@ -50,12 +52,23 @@ Normal behaviors remain available:
 
 - `Shift+Enter` still inserts a newline;
 - IME candidate confirmation still works;
+- while the `@` file/session (at file) or `/` command candidate menu is open, Enter confirms the candidate and is never intercepted;
 - editing, copy, paste, and attachments are unaffected;
 - clicking the official send button still sends; the lock only guards the keyboard.
 
-## Keyboard shortcut (future work)
+## Keyboard shortcut
 
-Keyboard shortcut support is currently listed as **future work**. For now, use the lock button beside the composer to lock and unlock. A shortcut will be enabled in a later release after compatibility is verified in Chrome / Edge.
+- **Windows / Linux**: `Ctrl+Shift+K`
+- **macOS**: `Cmd+Shift+K`
+
+The shortcut only fires while focus is inside a composer card: the handler resolves the session id from the focused element's card, so it stays inert when focus is in the chat area or the sidebar. It is ignored during IME composition and ignores key auto-repeat.
+
+Combo selection, verified on device:
+
+- `Ctrl+Alt` combos such as `Ctrl+Alt+L` are unreliable on Windows: the OS maps `Ctrl+Alt` to AltGr, and active IMEs (Microsoft Pinyin, WeChat IME, ...) consume the keydown before the page sees it — even in their English mode;
+- `Ctrl+Space` is the system IME toggle and is never usable;
+- `Ctrl+L` is the address bar shortcut in Chrome and Edge, and `Ctrl+Shift+L` is Edge's paste-and-search — both reserved by the browser;
+- `Ctrl+Shift+K` reaches the page and toggles the lock with those IMEs active, so it is the shipped combo.
 
 ## Requirements
 
@@ -111,6 +124,7 @@ Then restart `dsh web` and refresh the page.
 3. Toggle the lock:
 
    - Click the lock button in the composer tool row.
+   - Shortcut: `Ctrl+Shift+K` (Windows / Linux) or `Cmd+Shift+K` (macOS), with focus inside the composer card.
 
 4. While locked:
 
@@ -118,6 +132,7 @@ Then restart `dsh web` and refresh the page.
    - `Ctrl+Enter` / `Cmd+Enter` does not send.
    - `Shift+Enter` still inserts a newline.
    - IME composition Enter still confirms the candidate.
+   - While the `@` file/session (at file) or `/` command candidate menu is open, Enter confirms the candidate as usual.
    - Clicking the official send button still sends; the lock only guards keyboard input.
 
 5. Lock state is per session and is kept in memory only. It is cleared on refresh or restart.
@@ -130,6 +145,7 @@ The plugin is zero-configuration. It requires no API key, no settings fields, an
 
 - Lock state is browser-memory only; it does not write `settings.yaml` and makes no network requests.
 - The plugin uses the official `conversation.input.right` slot and does not replace the composer.
+- The lock only blocks Enter that would actually send: when a candidate menu is open with a highlighted item, Enter belongs to the menu and is left alone.
 
 ## Troubleshooting
 
@@ -144,9 +160,12 @@ The plugin is zero-configuration. It requires no API key, no settings fields, an
 2. Restart `dsh web` and force-refresh the page (`Ctrl+F5`).
 3. Make sure you are using the `web` profile.
 
-### The shortcut is unavailable
+### The shortcut does not fire
 
-Keyboard shortcut support has not been enabled yet and is listed as future work. Use the lock button beside the composer instead. Lock state is per session: a newly opened session starts unlocked.
+1. Focus must be inside the composer card (click the composer first): the handler resolves the session id from the focused element and stays inert elsewhere.
+2. Use `Ctrl+Shift+K` (`Cmd+Shift+K` on macOS): the old `Ctrl+Alt+L` combo is consumed by Windows IMEs before the page sees it and is no longer used.
+3. The shortcut is intentionally ignored during IME composition; finish candidate confirmation first.
+4. Make sure the installed version is `0.4.0` or newer (the shortcut was disabled in `0.3.x`).
 
 ### A message was sent while locked
 
