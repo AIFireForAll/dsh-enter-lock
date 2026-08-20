@@ -63,13 +63,6 @@ Normal behaviors remain available:
 
 The shortcut only fires while focus is inside a composer card: the handler resolves the session id from the focused element's card, so it stays inert when focus is in the chat area or the sidebar. It is ignored during IME composition and ignores key auto-repeat.
 
-Combo selection, verified on device:
-
-- `Ctrl+Alt` combos such as `Ctrl+Alt+L` are unreliable on Windows: the OS maps `Ctrl+Alt` to AltGr, and active IMEs (Microsoft Pinyin, WeChat IME, ...) consume the keydown before the page sees it — even in their English mode;
-- `Ctrl+Space` is the system IME toggle and is never usable;
-- `Ctrl+L` is the address bar shortcut in Chrome and Edge, and `Ctrl+Shift+L` is Edge's paste-and-search — both reserved by the browser;
-- `Ctrl+Shift+K` reaches the page and toggles the lock with those IMEs active, so it is the shipped combo.
-
 ## Requirements
 
 - DeepSeek Harness `0.1.0-rc.6` or newer;
